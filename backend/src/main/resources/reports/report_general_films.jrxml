@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="report_general_films" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a659550-9c8e-4f3b-bcf2-1b1d7d0a0b11">
+
+    <parameter name="P_REPORT_TITLE" class="java.lang.String"/>
+    <parameter name="P_GENERATION_DATE" class="java.lang.String"/>
+    <parameter name="P_CATEGORY_FILTER" class="java.lang.String"/>
+    <parameter name="P_RATING_FILTER" class="java.lang.String"/>
+    <parameter name="P_USER" class="java.lang.String"/>
+
+    <field name="film_id" class="java.lang.Object"/>
+    <field name="title" class="java.lang.String"/>
+    <field name="category_name" class="java.lang.String"/>
+    <field name="rating" class="java.lang.String"/>
+    <field name="length" class="java.lang.Object"/>
+    <field name="rental_duration" class="java.lang.Object"/>
+    <field name="rental_rate" class="java.lang.Number"/>
+    <field name="replacement_cost" class="java.lang.Number"/>
+    <field name="total_rentals" class="java.lang.Number"/>
+    <field name="total_revenue" class="java.lang.Number"/>
+
+    <variable name="TOTAL_FILMS" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[$F{film_id}]]></variableExpression>
+    </variable>
+    <variable name="SUM_REVENUE" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_revenue} != null ? Double.valueOf($F{total_revenue}.toString()) : 0.0]]></variableExpression>
+    </variable>
+    <variable name="AVG_RATE" class="java.lang.Double" calculation="Average">
+        <variableExpression><![CDATA[$F{rental_rate} != null ? Double.valueOf($F{rental_rate}.toString()) : 0.0]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="90">
+            <!-- Header Background Box -->
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="60" backcolor="#1E293B" mode="Opaque" uuid="2b6479e0-8fa3-4318-971c-32b71946dc39"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="16" y="8" width="350" height="24" forecolor="#FFFFFF" uuid="d6f9a0d8-1111-4a37-b4db-5509a25b3941"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[SISTEMA DE GESTIÓN Y CATÁLOGO]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="16" y="32" width="350" height="18" forecolor="#94A3B8" uuid="e7b0b1e9-2222-4a37-b4db-5509a25b3942"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="11" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{P_REPORT_TITLE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="370" y="8" width="170" height="16" forecolor="#E2E8F0" uuid="f8c1c2fa-3333-4a37-b4db-5509a25b3943"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Fecha: " + $P{P_GENERATION_DATE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="370" y="26" width="170" height="16" forecolor="#94A3B8" uuid="09d2d3ab-4444-4a37-b4db-5509a25b3944"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["PoC JasperReports 6.21"]]></textFieldExpression>
+            </textField>
+
+            <!-- Filters Bar -->
+            <rectangle>
+                <reportElement x="0" y="65" width="555" height="20" backcolor="#F1F5F9" mode="Opaque" uuid="1a2b3c4d-5555-4a37-b4db-5509a25b3945"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#CBD5E1"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="67" width="50" height="16" forecolor="#475569" uuid="2b3c4d5e-6666-4a37-b4db-5509a25b3946"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Filtros:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="60" y="67" width="220" height="16" forecolor="#334155" uuid="3c4d5e6f-7777-4a37-b4db-5509a25b3947"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{P_CATEGORY_FILTER}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="290" y="67" width="250" height="16" forecolor="#334155" uuid="4d5e6f7a-8888-4a37-b4db-5509a25b3948"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{P_RATING_FILTER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="24">
+            <rectangle>
+                <reportElement x="0" y="2" width="555" height="20" backcolor="#0284C7" mode="Opaque" uuid="5e6f7a8b-9999-4a37-b4db-5509a25b3949"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="6" y="4" width="30" height="16" forecolor="#FFFFFF" uuid="a1111111-0001-4a37-b4db-5509a25b3950"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="40" y="4" width="180" height="16" forecolor="#FFFFFF" uuid="a2222222-0002-4a37-b4db-5509a25b3951"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Título de la Película]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="225" y="4" width="85" height="16" forecolor="#FFFFFF" uuid="a3333333-0003-4a37-b4db-5509a25b3952"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Categoría]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="315" y="4" width="45" height="16" forecolor="#FFFFFF" uuid="a4444444-0004-4a37-b4db-5509a25b3953"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Clasif.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="365" y="4" width="45" height="16" forecolor="#FFFFFF" uuid="a5555555-0005-4a37-b4db-5509a25b3954"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Dur.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="415" y="4" width="45" height="16" forecolor="#FFFFFF" uuid="a6666666-0006-4a37-b4db-5509a25b3955"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Tarifa]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="465" y="4" width="35" height="16" forecolor="#FFFFFF" uuid="a7777777-0007-4a37-b4db-5509a25b3956"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Rentas]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="505" y="4" width="45" height="16" forecolor="#FFFFFF" uuid="a8888888-0008-4a37-b4db-5509a25b3957"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total ($)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="17" backcolor="#F8FAFC" mode="Opaque" uuid="b1111111-0001-4a37-b4db-5509a25b3958">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <line>
+                <reportElement x="0" y="17" width="555" height="1" forecolor="#E2E8F0" uuid="b2222222-0002-4a37-b4db-5509a25b3959"/>
+            </line>
+            <textField>
+                <reportElement x="6" y="1" width="30" height="15" forecolor="#64748B" uuid="c1111111-0001-4a37-b4db-5509a25b3960"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[String.valueOf($F{film_id})]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="40" y="1" width="180" height="15" forecolor="#0F172A" uuid="c2222222-0002-4a37-b4db-5509a25b3961"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="225" y="1" width="85" height="15" forecolor="#334155" uuid="c3333333-0003-4a37-b4db-5509a25b3962"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{category_name} != null ? $F{category_name} : "N/A"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="315" y="1" width="45" height="15" forecolor="#0369A1" uuid="c4444444-0004-4a37-b4db-5509a25b3963"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{rating}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="365" y="1" width="45" height="15" forecolor="#475569" uuid="c5555555-0005-4a37-b4db-5509a25b3964"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{length} + " min"]]></textFieldExpression>
+            </textField>
+            <textField pattern="$#,##0.00">
+                <reportElement x="415" y="1" width="45" height="15" forecolor="#475569" uuid="c6666666-0006-4a37-b4db-5509a25b3965"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{rental_rate} != null ? $F{rental_rate} : 0.0]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="465" y="1" width="35" height="15" forecolor="#475569" uuid="c7777777-0007-4a37-b4db-5509a25b3966"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_rentals} != null ? $F{total_rentals} : 0]]></textFieldExpression>
+            </textField>
+            <textField pattern="$#,##0.00">
+                <reportElement x="505" y="1" width="45" height="15" forecolor="#047857" uuid="c8888888-0008-4a37-b4db-5509a25b3967"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_revenue} != null ? $F{total_revenue} : 0.0]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="25">
+            <line>
+                <reportElement x="0" y="2" width="555" height="1" forecolor="#E2E8F0" uuid="e1111111-0001-4a37-b4db-5509a25b3975"/>
+            </line>
+            <textField>
+                <reportElement x="0" y="6" width="300" height="15" forecolor="#94A3B8" uuid="e2222222-0002-4a37-b4db-5509a25b3976"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Prueba de Concepto JasperReports | Generado por " + $P{P_USER}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="6" width="150" height="15" forecolor="#94A3B8" uuid="e3333333-0003-4a37-b4db-5509a25b3977"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="502" y="6" width="50" height="15" forecolor="#94A3B8" uuid="e4444444-0004-4a37-b4db-5509a25b3978"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="65">
+            <rectangle>
+                <reportElement x="0" y="10" width="555" height="45" backcolor="#F8FAFC" mode="Opaque" uuid="d1111111-0001-4a37-b4db-5509a25b3968"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#CBD5E1"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="12" y="15" width="120" height="15" forecolor="#64748B" uuid="d2222222-0002-4a37-b4db-5509a25b3969"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TOTAL PELÍCULAS:]]></text>
+            </staticText>
+            <textField evaluationTime="Report">
+                <reportElement x="12" y="30" width="120" height="20" forecolor="#0F172A" uuid="d3333333-0003-4a37-b4db-5509a25b3970"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{TOTAL_FILMS}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="190" y="15" width="130" height="15" forecolor="#64748B" uuid="d4444444-0004-4a37-b4db-5509a25b3971"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TARIFA PROMEDIO:]]></text>
+            </staticText>
+            <textField evaluationTime="Report" pattern="$#,##0.00">
+                <reportElement x="190" y="30" width="130" height="20" forecolor="#0F172A" uuid="d5555555-0005-4a37-b4db-5509a25b3972"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{AVG_RATE} != null ? $V{AVG_RATE} : 0.0]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="380" y="15" width="160" height="15" forecolor="#64748B" uuid="d6666666-0006-4a37-b4db-5509a25b3973"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[INGRESOS TOTALES GENERADOS:]]></text>
+            </staticText>
+            <textField evaluationTime="Report" pattern="$#,##0.00">
+                <reportElement x="380" y="30" width="160" height="20" forecolor="#047857" uuid="d7777777-0007-4a37-b4db-5509a25b3974"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{SUM_REVENUE} != null ? $V{SUM_REVENUE} : 0.0]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="report_store_analytics" orientation="Landscape" pageWidth="842" pageHeight="595"
+              columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="9c87b772-1e0a-5f5d-def4-3d3f9f2c2d33">
+
+    <parameter name="P_REPORT_TITLE" class="java.lang.String"/>
+    <parameter name="P_GENERATION_DATE" class="java.lang.String"/>
+    <parameter name="P_STORE_FILTER" class="java.lang.String"/>
+    <parameter name="P_USER" class="java.lang.String"/>
+
+    <field name="category_id" class="java.lang.Object"/>
+    <field name="category_name" class="java.lang.String"/>
+    <field name="total_films" class="java.lang.Number"/>
+    <field name="total_rentals" class="java.lang.Number"/>
+    <field name="total_revenue" class="java.lang.Number"/>
+    <field name="avg_rental_rate" class="java.lang.Number"/>
+    <field name="revenue_per_rental" class="java.lang.Number"/>
+
+    <!-- Summary Variables -->
+    <variable name="SUM_TOTAL_REVENUE" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_revenue} != null ? Double.valueOf($F{total_revenue}.toString()) : 0.0]]></variableExpression>
+    </variable>
+    <variable name="SUM_TOTAL_RENTALS" class="java.lang.Long" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_rentals} != null ? Long.valueOf($F{total_rentals}.toString()) : 0L]]></variableExpression>
+    </variable>
+    <variable name="SUM_TOTAL_FILMS" class="java.lang.Long" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_films} != null ? Long.valueOf($F{total_films}.toString()) : 0L]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="65">
+            <!-- Header Bar -->
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="55" backcolor="#0F172A" mode="Opaque" uuid="a1112222-0001-4a37-b4db-5509a25b4020"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="16" y="8" width="450" height="22" forecolor="#38BDF8" uuid="a1112222-0002-4a37-b4db-5509a25b4021"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[DASHBOARD EJECUTIVO Y ANÁLISIS DE INGRESOS]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="16" y="30" width="450" height="16" forecolor="#94A3B8" uuid="a1112222-0003-4a37-b4db-5509a25b4022"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{P_REPORT_TITLE} + " | " + $P{P_STORE_FILTER}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="550" y="8" width="236" height="16" forecolor="#E2E8F0" uuid="a1112222-0004-4a37-b4db-5509a25b4023"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Generado: " + $P{P_GENERATION_DATE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="550" y="26" width="236" height="16" forecolor="#94A3B8" uuid="a1112222-0005-4a37-b4db-5509a25b4024"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["JasperReports Chart Engine | JFreeChart"]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="20">
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="18" backcolor="#0284C7" mode="Opaque" uuid="b1112222-0001-4a37-b4db-5509a25b4025"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="1" width="40" height="16" forecolor="#FFFFFF" uuid="b1112222-0002-4a37-b4db-5509a25b4026"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="55" y="1" width="180" height="16" forecolor="#FFFFFF" uuid="b1112222-0003-4a37-b4db-5509a25b4027"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Categoría de Película]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="245" y="1" width="90" height="16" forecolor="#FFFFFF" uuid="b1112222-0004-4a37-b4db-5509a25b4028"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Películas]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="345" y="1" width="100" height="16" forecolor="#FFFFFF" uuid="b1112222-0005-4a37-b4db-5509a25b4029"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Rentas]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="455" y="1" width="110" height="16" forecolor="#FFFFFF" uuid="b1112222-0006-4a37-b4db-5509a25b4030"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ingreso Total ($)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="575" y="1" width="100" height="16" forecolor="#FFFFFF" uuid="b1112222-0007-4a37-b4db-5509a25b4031"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Tarifa Promedio]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="685" y="1" width="105" height="16" forecolor="#FFFFFF" uuid="b1112222-0008-4a37-b4db-5509a25b4032"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ingreso Prom./Renta]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="18">
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="17" backcolor="#F8FAFC" mode="Opaque" uuid="c1112222-0001-4a37-b4db-5509a25b4034">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <line>
+                <reportElement x="0" y="17" width="802" height="1" forecolor="#E2E8F0" uuid="c1112222-0000-4a37-b4db-5509a25b4033"/>
+            </line>
+            <textField>
+                <reportElement x="8" y="1" width="40" height="15" forecolor="#64748B" uuid="c1112222-0002-4a37-b4db-5509a25b4035"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[String.valueOf($F{category_id})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="55" y="1" width="180" height="15" forecolor="#0F172A" uuid="c1112222-0003-4a37-b4db-5509a25b4036"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{category_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="245" y="1" width="90" height="15" forecolor="#475569" uuid="c1112222-0004-4a37-b4db-5509a25b4037"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_films} != null ? $F{total_films} : 0]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="345" y="1" width="100" height="15" forecolor="#0284C7" uuid="c1112222-0005-4a37-b4db-5509a25b4038"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_rentals} != null ? $F{total_rentals} : 0]]></textFieldExpression>
+            </textField>
+            <textField pattern="$#,##0.00">
+                <reportElement x="455" y="1" width="110" height="15" forecolor="#059669" uuid="c1112222-0006-4a37-b4db-5509a25b4039"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_revenue} != null ? $F{total_revenue} : 0.0]]></textFieldExpression>
+            </textField>
+            <textField pattern="$#,##0.00">
+                <reportElement x="575" y="1" width="100" height="15" forecolor="#475569" uuid="c1112222-0007-4a37-b4db-5509a25b4040"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{avg_rental_rate} != null ? $F{avg_rental_rate} : 0.0]]></textFieldExpression>
+            </textField>
+            <textField pattern="$#,##0.00">
+                <reportElement x="685" y="1" width="105" height="15" forecolor="#D97706" uuid="c1112222-0008-4a37-b4db-5509a25b4041"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{revenue_per_rental} != null ? $F{revenue_per_rental} : 0.0]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="25">
+            <line>
+                <reportElement x="0" y="2" width="802" height="1" forecolor="#E2E8F0" uuid="e1112222-0001-4a37-b4db-5509a25b4055"/>
+            </line>
+            <textField>
+                <reportElement x="0" y="6" width="350" height="15" forecolor="#94A3B8" uuid="e1112222-0002-4a37-b4db-5509a25b4056"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Dashboard Ejecutivo JasperReports | " + $P{P_USER}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="600" y="6" width="150" height="15" forecolor="#94A3B8" uuid="e1112222-0003-4a37-b4db-5509a25b4057"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="752" y="6" width="50" height="15" forecolor="#94A3B8" uuid="e1112222-0004-4a37-b4db-5509a25b4058"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="270">
+            <!-- Native JasperReports Bar/Pie Chart Component -->
+            <pieChart>
+                <chart isShowLegend="true" evaluationTime="Report">
+                    <reportElement x="0" y="5" width="802" height="190" uuid="d1112222-0001-4a37-b4db-5509a25b4041"/>
+                    <chartTitle position="Top">
+                        <font fontName="SansSerif" size="11" isBold="true"/>
+                        <titleExpression><![CDATA["Participación Proporcional de Ingresos por Género / Categoría"]]></titleExpression>
+                    </chartTitle>
+                    <chartSubtitle/>
+                    <chartLegend textColor="#334155"/>
+                </chart>
+                <pieDataset>
+                    <keyExpression><![CDATA[$F{category_name}]]></keyExpression>
+                    <valueExpression><![CDATA[$F{total_revenue} != null ? Double.valueOf($F{total_revenue}.toString()) : 0.0]]></valueExpression>
+                    <labelExpression><![CDATA[$F{category_name}]]></labelExpression>
+                </pieDataset>
+                <piePlot isCircular="true">
+                    <plot/>
+                    <itemLabel color="#0F172A"/>
+                </piePlot>
+            </pieChart>
+
+            <!-- KPI Cards Banner -->
+            <rectangle>
+                <reportElement x="0" y="205" width="802" height="58" backcolor="#0F172A" mode="Opaque" uuid="d1112222-0002-4a37-b4db-5509a25b4042"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+
+            <!-- KPI 1: Ingreso Total -->
+            <rectangle>
+                <reportElement x="12" y="210" width="180" height="46" backcolor="#1E293B" mode="Opaque" uuid="d1112222-0003-4a37-b4db-5509a25b4043"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#334155"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="20" y="214" width="164" height="14" forecolor="#94A3B8" uuid="d1112222-0004-4a37-b4db-5509a25b4044"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="7" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TOTAL INGRESOS FACTURADOS]]></text>
+            </staticText>
+            <textField evaluationTime="Report" pattern="$#,##0.00">
+                <reportElement x="20" y="228" width="164" height="22" forecolor="#34D399" uuid="d1112222-0005-4a37-b4db-5509a25b4045"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{SUM_TOTAL_REVENUE} != null ? $V{SUM_TOTAL_REVENUE} : 0.0]]></textFieldExpression>
+            </textField>
+
+            <!-- KPI 2: Total Rentas -->
+            <rectangle>
+                <reportElement x="208" y="210" width="180" height="46" backcolor="#1E293B" mode="Opaque" uuid="d1112222-0006-4a37-b4db-5509a25b4046"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#334155"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="216" y="214" width="164" height="14" forecolor="#94A3B8" uuid="d1112222-0007-4a37-b4db-5509a25b4047"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="7" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TOTAL TRANSACCIONES RENTA]]></text>
+            </staticText>
+            <textField evaluationTime="Report">
+                <reportElement x="216" y="228" width="164" height="22" forecolor="#38BDF8" uuid="d1112222-0008-4a37-b4db-5509a25b4048"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{SUM_TOTAL_RENTALS} != null ? $V{SUM_TOTAL_RENTALS} : 0]]></textFieldExpression>
+            </textField>
+
+            <!-- KPI 3: Total Películas -->
+            <rectangle>
+                <reportElement x="404" y="210" width="180" height="46" backcolor="#1E293B" mode="Opaque" uuid="d1112222-0009-4a37-b4db-5509a25b4049"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#334155"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="412" y="214" width="164" height="14" forecolor="#94A3B8" uuid="d1112222-0010-4a37-b4db-5509a25b4050"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="7" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TÍTULOS ANALIZADOS]]></text>
+            </staticText>
+            <textField evaluationTime="Report">
+                <reportElement x="412" y="228" width="164" height="22" forecolor="#F8FAFC" uuid="d1112222-0011-4a37-b4db-5509a25b4051"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{SUM_TOTAL_FILMS} != null ? $V{SUM_TOTAL_FILMS} : 0]]></textFieldExpression>
+            </textField>
+
+            <!-- KPI 4: Ticket Promedio -->
+            <rectangle>
+                <reportElement x="600" y="210" width="190" height="46" backcolor="#1E293B" mode="Opaque" uuid="d1112222-0012-4a37-b4db-5509a25b4052"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#334155"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="608" y="214" width="170" height="14" forecolor="#94A3B8" uuid="d1112222-0013-4a37-b4db-5509a25b4053"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="7" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TICKET PROMEDIO POR TRANSACCIÓN]]></text>
+            </staticText>
+            <textField evaluationTime="Report" pattern="$#,##0.00">
+                <reportElement x="608" y="228" width="170" height="22" forecolor="#FBBF24" uuid="d1112222-0014-4a37-b4db-5509a25b4054"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[($V{SUM_TOTAL_RENTALS} != null && $V{SUM_TOTAL_RENTALS} > 0 && $V{SUM_TOTAL_REVENUE} != null) ? $V{SUM_TOTAL_REVENUE} / $V{SUM_TOTAL_RENTALS} : 0.00]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
