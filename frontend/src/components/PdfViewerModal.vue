@@ -92,56 +92,55 @@ onUnmounted(() => {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 8, 16, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
   padding: 20px;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.15s ease-out;
 }
 
 .modal-dialog {
-  background: #0F172A;
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   width: 95vw;
   max-width: 1200px;
   height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  animation: scaleUp 0.2s ease-out;
+  animation: scaleUp 0.15s ease-out;
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
-  background: #1E293B;
+  padding: 12px 20px;
+  background: #FFFFFF;
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .modal-title {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-close {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 6px;
   border-radius: var(--radius-sm);
@@ -152,13 +151,13 @@ onUnmounted(() => {
 }
 
 .btn-close:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #F1F5F9;
   color: var(--text-primary);
 }
 
 .modal-body {
   flex: 1;
-  background: #334155;
+  background: #F1F5F9;
   position: relative;
 }
 
@@ -175,7 +174,7 @@ onUnmounted(() => {
 }
 
 @keyframes scaleUp {
-  from { transform: scale(0.96); opacity: 0; }
+  from { transform: scale(0.98); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 </style>

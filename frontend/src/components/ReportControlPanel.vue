@@ -306,67 +306,67 @@ async function handleGenerate(reportType, disposition) {
 
 <style scoped>
 .report-panel {
-  margin-bottom: 32px;
-}
-
-.panel-header {
   margin-bottom: 24px;
 }
 
+.panel-header {
+  margin-bottom: 16px;
+}
+
 .panel-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .panel-desc {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   margin-top: 4px;
 }
 
 .panel-desc code {
-  color: var(--accent-cyan);
-  background: rgba(56, 189, 248, 0.1);
+  color: #0369A1;
+  background: #E0F2FE;
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.85em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .reports-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 16px;
 }
 
 .report-card {
-  background: rgba(15, 23, 42, 0.6);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 20px;
+  border-radius: var(--radius-sm);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: var(--shadow-sm);
   transition: var(--transition);
 }
 
 .report-card:hover {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: rgba(56, 189, 248, 0.3);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: #CBD5E1;
 }
 
 .card-top {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .report-icon {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -375,47 +375,51 @@ async function handleGenerate(reportType, disposition) {
 }
 
 .report-icon.r1 {
-  background: rgba(56, 189, 248, 0.15);
-  color: var(--accent-cyan);
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #DBEAFE;
 }
 
 .report-icon.r2 {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--accent-indigo);
+  background: #EEF2FF;
+  color: #4F46E5;
+  border: 1px solid #E0E7FF;
 }
 
 .report-icon.r3 {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--accent-emerald);
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #D1FAE5;
 }
 
 .report-name {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .report-text {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   line-height: 1.4;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .report-params {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 14px;
+  gap: 10px;
+  margin-bottom: 14px;
+  background: #F8FAFC;
+  padding: 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
 }
 
 .card-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .card-actions .btn {
@@ -423,10 +427,10 @@ async function handleGenerate(reportType, disposition) {
 }
 
 .spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-top-color: currentColor;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #FFFFFF;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   display: inline-block;

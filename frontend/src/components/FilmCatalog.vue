@@ -234,7 +234,7 @@ function getRatingBadgeClass(rating) {
 
 <style scoped>
 .film-catalog {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .catalog-header {
@@ -242,100 +242,104 @@ function getRatingBadgeClass(rating) {
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .catalog-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .catalog-desc {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   margin-top: 4px;
 }
 
 .catalog-desc code {
-  color: var(--accent-cyan);
-  background: rgba(56, 189, 248, 0.1);
-  padding: 2px 6px;
+  color: #0369A1;
+  background: #E0F2FE;
+  padding: 2px 5px;
   border-radius: 4px;
   font-size: 0.85em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .filter-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
-  background: rgba(15, 23, 42, 0.5);
-  padding: 14px;
-  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  background: #F8FAFC;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-subtle);
 }
 
 .search-box {
   position: relative;
-  flex: 1 1 280px;
+  flex: 1 1 240px;
   display: flex;
   align-items: center;
 }
 
 .search-box svg {
   position: absolute;
-  left: 12px;
+  left: 10px;
   color: var(--text-muted);
 }
 
 .search-input {
-  padding-left: 38px;
+  padding-left: 34px;
 }
 
 .filter-select {
-  min-width: 190px;
+  min-width: 170px;
 }
 
 .table-container {
   overflow-x: auto;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-subtle);
-  background: rgba(15, 23, 42, 0.4);
+  background: #FFFFFF;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .data-table th {
-  background: rgba(30, 41, 59, 0.8);
-  color: var(--text-secondary);
+  background: #F8FAFC;
+  color: #475569;
   font-weight: 600;
   text-align: left;
-  padding: 12px 16px;
+  padding: 9px 12px;
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
-  font-family: var(--font-heading);
-  letter-spacing: 0.02em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .data-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 9px 12px;
+  border-bottom: 1px solid #F1F5F9;
   vertical-align: middle;
+  color: var(--text-primary);
 }
 
 .film-row:hover {
-  background: rgba(51, 65, 85, 0.4);
+  background: #F8FAFC;
 }
 
 .col-id {
-  width: 60px;
+  width: 50px;
   color: var(--text-muted);
 }
 
@@ -346,7 +350,6 @@ function getRatingBadgeClass(rating) {
 .film-title {
   font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
 }
 
 .film-desc {
@@ -356,39 +359,39 @@ function getRatingBadgeClass(rating) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .category-tag {
-  color: var(--accent-cyan);
+  color: #0369A1;
   font-weight: 500;
 }
 
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-secondary { color: var(--text-secondary); }
-.text-emerald { color: #34D399; }
-.text-cyan { color: var(--accent-cyan); }
-.font-bold { font-weight: 700; }
+.text-emerald { color: #16A34A; }
+.text-cyan { color: #0284C7; }
+.font-bold { font-weight: 600; }
 
 .no-data {
   text-align: center;
-  padding: 48px 16px;
+  padding: 36px 16px;
   color: var(--text-muted);
 }
 
 .no-data svg {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   stroke: var(--text-muted);
 }
 
 .skeleton-row td {
-  padding: 16px;
+  padding: 12px;
 }
 
 .skeleton-bar {
-  height: 16px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+  height: 14px;
+  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
@@ -403,13 +406,13 @@ function getRatingBadgeClass(rating) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 8px 0;
-  font-size: 0.85rem;
+  padding: 12px 4px 0;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
 }
 
 .page-buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 </style>

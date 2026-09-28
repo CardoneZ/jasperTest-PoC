@@ -7,30 +7,28 @@
       <section class="hero-section">
         <div class="hero-content">
           <div class="hero-tag">
-            <span class="pulse-dot"></span>
             Prueba de Concepto y Validación Tecnológica
           </div>
           <h1 class="hero-title">
-            Integración de <span class="gradient-text">JasperReports</span> en Plataformas Web Modernas
+            Integración de JasperReports en Plataformas Web
           </h1>
           <p class="hero-subtitle">
-            Demostración de arquitectura desacoplada para generación de reportes empresariales con Vue 3 en el frontend,
-            servicios web independientes en Java (Spring Boot) y base de datos relacional Sakila (MySQL).
+            Demostración técnica de generación y exportación de reportes corporativos con Vue 3, Spring Boot y base de datos relacional Sakila (MySQL).
           </p>
         </div>
 
         <div class="quick-kpis">
           <div class="kpi-mini-card">
             <span class="kpi-num">3</span>
-            <span class="kpi-lbl">Servicios Web de Reportes</span>
+            <span class="kpi-lbl">Servicios de Reportes</span>
           </div>
           <div class="kpi-mini-card">
             <span class="kpi-num">4</span>
-            <span class="kpi-lbl">Procedimientos Almacenados</span>
+            <span class="kpi-lbl">Procedimientos SQL</span>
           </div>
           <div class="kpi-mini-card">
             <span class="kpi-num">100%</span>
-            <span class="kpi-lbl">JRXML Nativos Compilados</span>
+            <span class="kpi-lbl">Plantillas JRXML</span>
           </div>
         </div>
       </section>
@@ -64,8 +62,8 @@
     <!-- Footer -->
     <footer class="app-footer">
       <div class="container footer-content">
-        <p>Prueba de Concepto JasperReports &copy; 2026 | Arquitectura de Servicios Web para Evaluación de Software</p>
-        <p class="footer-note">Validación técnica para futura integración en plataforma de Recursos Humanos</p>
+        <p>Prueba de Concepto JasperReports &copy; 2026 | Arquitectura de Servicios Web para Evaluación Técnica</p>
+        <p class="footer-note">Integración para módulo de Recursos Humanos y Reportes</p>
       </div>
     </footer>
   </div>
@@ -135,101 +133,86 @@ function addToast({ type, text }) {
 
 .main-content {
   flex: 1;
-  padding-top: 36px;
-  padding-bottom: 60px;
+  padding-top: 24px;
+  padding-bottom: 40px;
 }
 
 .hero-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 32px;
-  margin-bottom: 40px;
+  gap: 24px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
 .hero-content {
-  max-width: 780px;
+  max-width: 760px;
 }
 
 .hero-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
+  display: inline-block;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--accent-cyan);
-  background: rgba(56, 189, 248, 0.1);
-  padding: 6px 14px;
-  border-radius: 9999px;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  margin-bottom: 16px;
-}
-
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 10px var(--accent-cyan);
+  color: #0369A1;
+  background: #E0F2FE;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #BAE6FD;
+  margin-bottom: 10px;
 }
 
 .hero-title {
-  font-size: 2.4rem;
-  line-height: 1.15;
-  color: #FFFFFF;
-  margin-bottom: 14px;
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #C084FC 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  margin-bottom: 6px;
 }
 
 .hero-subtitle {
-  font-size: 1.05rem;
+  font-size: 0.9375rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .quick-kpis {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .kpi-mini-card {
-  background: rgba(30, 41, 59, 0.6);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
-  min-width: 130px;
+  min-width: 115px;
+  box-shadow: var(--shadow-sm);
 }
 
 .kpi-num {
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--accent-cyan);
-  line-height: 1;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  line-height: 1.1;
 }
 
 .kpi-lbl {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: 6px;
+  letter-spacing: 0.03em;
+  margin-top: 4px;
 }
 
 .app-footer {
   border-top: 1px solid var(--border-subtle);
-  background: rgba(15, 23, 42, 0.9);
-  padding: 24px 0;
+  background: #FFFFFF;
+  padding: 16px 0;
   margin-top: auto;
 }
 
@@ -238,13 +221,12 @@ function addToast({ type, text }) {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
-  font-size: 0.8rem;
+  gap: 10px;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
 .footer-note {
   color: var(--text-secondary);
-  font-style: italic;
 }
 </style>

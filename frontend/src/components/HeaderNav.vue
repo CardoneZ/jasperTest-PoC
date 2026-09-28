@@ -3,7 +3,7 @@
     <div class="container header-container">
       <div class="brand">
         <div class="logo-box">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -12,8 +12,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="brand-title">JasperReports Studio</h1>
-          <p class="brand-subtitle">Prueba de Concepto & Integración Tecnológica</p>
+          <h1 class="brand-title">JasperReports</h1>
+          <p class="brand-subtitle">Módulo de Reportes</p>
         </div>
       </div>
 
@@ -24,9 +24,9 @@
         </span>
         <span class="badge badge-cyan">
           <span class="status-dot db"></span>
-          Sakila DB :3307
+          MySQL :3306
         </span>
-        <span class="badge badge-indigo">
+        <span class="badge badge-slate">
           JasperReports 6.21.3
         </span>
       </div>
@@ -39,14 +39,13 @@
 
 <style scoped>
 .header-nav {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #FFFFFF;
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 14px 0;
+  padding: 10px 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
 .header-container {
@@ -54,59 +53,58 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .logo-box {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 
 .brand-title {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
 }
 
 .brand-subtitle {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 .system-status {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .status-dot.online {
-  background: #10B981;
-  box-shadow: 0 0 8px #10B981;
+  background: #16A34A;
 }
 
 .status-dot.db {
-  background: #38BDF8;
-  box-shadow: 0 0 8px #38BDF8;
+  background: #0284C7;
 }
 </style>
