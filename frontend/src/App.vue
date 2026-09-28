@@ -1,54 +1,64 @@
 <template>
   <div class="app-layout">
-    <HeaderNav />
+    <HeaderNav :active-tab="activeTab" @change-tab="(tab) => activeTab = tab" />
 
     <main class="main-content container">
-      <!-- Hero Section -->
-      <section class="hero-section">
-        <div class="hero-content">
-          <div class="hero-tag">
-            Prueba de Concepto y Validación Tecnológica
-          </div>
-          <h1 class="hero-title">
-            Integración de JasperReports en Plataformas Web
-          </h1>
-          <p class="hero-subtitle">
-            Demostración técnica de generación y exportación de reportes corporativos con Vue 3, Spring Boot y base de datos relacional Sakila (MySQL).
-          </p>
-        </div>
-
-        <div class="quick-kpis">
-          <div class="kpi-mini-card">
-            <span class="kpi-num">3</span>
-            <span class="kpi-lbl">Servicios de Reportes</span>
-          </div>
-          <div class="kpi-mini-card">
-            <span class="kpi-num">4</span>
-            <span class="kpi-lbl">Procedimientos SQL</span>
-          </div>
-          <div class="kpi-mini-card">
-            <span class="kpi-num">100%</span>
-            <span class="kpi-lbl">Plantillas JRXML</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 1: Report Generation Center -->
-      <section id="section-reports">
-        <ReportControlPanel 
-          :categories="categories" 
+      <!-- MÓDULO 1: ASISTENCIA Y CHECADOR ZKTECO LX50 -->
+      <section v-if="activeTab === 'attendance'" id="section-attendance">
+        <AttendanceManager 
           @preview-report="openPdfModal" 
           @show-toast="addToast" />
       </section>
 
-      <!-- Section 2: Catalog Consultation & Visualization -->
-      <section id="section-catalog">
-        <FilmCatalog 
-          :categories="categories" />
-      </section>
+      <!-- MÓDULO 2: REPORTES JASPER Y CATÁLOGO SAKILA -->
+      <div v-else-if="activeTab === 'reports'" class="reports-workspace">
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-content">
+            <div class="hero-tag">
+              Prueba de Concepto y Validación Tecnológica
+            </div>
+            <h1 class="hero-title">
+              Integración de JasperReports en Plataformas Web
+            </h1>
+            <p class="hero-subtitle">
+              Demostración técnica de generación y exportación de reportes corporativos con Vue 3, Spring Boot y base de datos relacional Sakila (MySQL).
+            </p>
+          </div>
+
+          <div class="quick-kpis">
+            <div class="kpi-mini-card">
+              <span class="kpi-num">4</span>
+              <span class="kpi-lbl">Servicios de Reportes</span>
+            </div>
+            <div class="kpi-mini-card">
+              <span class="kpi-num">5</span>
+              <span class="kpi-lbl">Procedimientos SQL</span>
+            </div>
+            <div class="kpi-mini-card">
+              <span class="kpi-num">100%</span>
+              <span class="kpi-lbl">Plantillas JRXML</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 1: Report Generation Center -->
+        <section id="section-reports">
+          <ReportControlPanel 
+            :categories="categories" 
+            @preview-report="openPdfModal" 
+            @show-toast="addToast" />
+        </section>
+
+        <!-- Section 2: Catalog Consultation & Visualization -->
+        <section id="section-catalog">
+          <FilmCatalog 
+            :categories="categories" />
+        </section>
+      </div>
     </main>
 
-    <!-- PDF Viewer Modal -->
+    <!-- PDF Viewer Modal (Compartido para todos los reportes Jasper) -->
     <PdfViewerModal 
       :is-open="isModalOpen" 
       :pdf-url="modalPdfUrl" 
@@ -63,7 +73,7 @@
     <footer class="app-footer">
       <div class="container footer-content">
         <p>Prueba de Concepto JasperReports &copy; 2026 | Arquitectura de Servicios Web para Evaluación Técnica</p>
-        <p class="footer-note">Integración para módulo de Recursos Humanos y Reportes</p>
+        <p class="footer-note">Integración para módulo de Recursos Humanos, Asistencia ZKTeco LX50 y Reportes</p>
       </div>
     </footer>
   </div>
@@ -72,11 +82,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import HeaderNav from './components/HeaderNav.vue'
+import AttendanceManager from './components/AttendanceManager.vue'
 import ReportControlPanel from './components/ReportControlPanel.vue'
 import FilmCatalog from './components/FilmCatalog.vue'
 import PdfViewerModal from './components/PdfViewerModal.vue'
 import ToastNotification from './components/ToastNotification.vue'
 
+// Active Tab ('attendance' | 'reports')
+const activeTab = ref('attendance')
 const categories = ref([])
 
 // Modal State
@@ -137,12 +150,18 @@ function addToast({ type, text }) {
   padding-bottom: 40px;
 }
 
+.reports-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .hero-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
@@ -154,24 +173,24 @@ function addToast({ type, text }) {
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #0369A1;
-  background: #E0F2FE;
-  padding: 3px 8px;
-  border-radius: 4px;
-  border: 1px solid #BAE6FD;
+  color: var(--accent-primary);
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 3px 10px;
+  border-radius: 999px;
   margin-bottom: 10px;
 }
 
 .hero-title {
-  font-size: 1.625rem;
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
   color: var(--text-primary);
-  margin-bottom: 6px;
 }
 
 .hero-subtitle {
-  font-size: 0.9375rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -183,14 +202,15 @@ function addToast({ type, text }) {
 }
 
 .kpi-mini-card {
-  background: #FFFFFF;
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  min-width: 120px;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  min-width: 115px;
-  box-shadow: var(--shadow-sm);
+  align-items: center;
 }
 
 .kpi-num {
@@ -201,19 +221,17 @@ function addToast({ type, text }) {
 }
 
 .kpi-lbl {
-  font-size: 0.6875rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-top: 4px;
+  font-weight: 500;
 }
 
 .app-footer {
-  border-top: 1px solid var(--border-subtle);
   background: #FFFFFF;
+  border-top: 1px solid var(--border-subtle);
   padding: 16px 0;
-  margin-top: auto;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .footer-content {
@@ -221,12 +239,11 @@ function addToast({ type, text }) {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
+  gap: 12px;
 }
 
 .footer-note {
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 </style>
