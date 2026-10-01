@@ -15,14 +15,6 @@
       </div>
 
       <div class="header-actions">
-        <button class="btn btn-outline" @click="downloadSampleExcel" :disabled="downloadingSample">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          {{ downloadingSample ? 'Descargando...' : 'Descargar Archivo Muestra LX50 (.xlsx)' }}
-        </button>
 
         <button class="btn btn-secondary" @click="fetchStats">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -436,7 +428,7 @@
                     </span>
                   </td>
                   <td class="text-center font-mono text-xs text-secondary">
-                    {{ rec.period || rec.date || '-' }}
+                    {{ formatDateOrPeriod(rec.period || rec.date) }}
                   </td>
                   <td class="text-center">
                     <span class="badge" :class="getStatusBadge(rec.status)">
@@ -462,12 +454,12 @@
         <div class="filter-controls-row">
           <div class="form-group">
             <label class="form-label">Fecha Desde:</label>
-            <input type="date" v-model="dbFilterStartDate" class="form-control" />
+            <DateInput v-model="dbFilterStartDate" placeholder="dd / mm / aaaa" />
           </div>
 
           <div class="form-group">
             <label class="form-label">Fecha Hasta:</label>
-            <input type="date" v-model="dbFilterEndDate" class="form-control" />
+            <DateInput v-model="dbFilterEndDate" placeholder="dd / mm / aaaa" />
           </div>
 
           <div class="form-group">
@@ -569,7 +561,7 @@
                   </span>
                 </td>
                 <td class="text-center font-mono text-xs text-secondary">
-                  {{ row.period_range || row.punch_date || '-' }}
+                  {{ formatDateOrPeriod(row.period_range || row.punch_date) }}
                 </td>
                 <td class="text-xs text-muted text-center font-mono">{{ formatTimestamp(row.created_at) }}</td>
               </tr>
@@ -593,6 +585,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import DateInput from './DateInput.vue'
 
 const emit = defineEmits(['preview-report', 'show-toast'])
 
@@ -616,7 +609,6 @@ const previewFilter = ref('ALL')
 const previewSearch = ref('')
 const isSaving = ref(false)
 const confirmResult = ref(null)
-const downloadingSample = ref(false)
 
 // Database tab state
 const dbRecords = ref([])
@@ -644,31 +636,6 @@ async function fetchStats() {
   }
 }
 
-// Download authentic ZKTeco LX50 sample excel
-async function downloadSampleExcel() {
-  downloadingSample.value = true
-  try {
-    const res = await fetch('http://localhost:8080/api/attendance/sample')
-    if (res.ok) {
-      const blob = await res.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'ZKTeco_LX50_Asistencia_Ejemplo.xlsx'
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-      emit('show-toast', { type: 'success', text: 'Archivo de muestra ZKTeco LX50 descargado con éxito.' })
-    } else {
-      throw new Error('Error al descargar archivo de prueba')
-    }
-  } catch (err) {
-    emit('show-toast', { type: 'error', text: 'No se pudo descargar la plantilla de ejemplo.' })
-  } finally {
-    downloadingSample.value = false
-  }
-}
 
 // File Drag & Drop / Selection
 function triggerFileInput() {
@@ -864,7 +831,68 @@ function formatBytes(bytes) {
 
 function formatTimestamp(ts) {
   if (!ts) return '-'
-  return ts.replace('T', ' ').substring(0, 19)
+  if (typeof ts === 'string') {
+    // YYYY-MM-DD[T or space]HH:mm(:ss)?
+    const m = ts.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})[T ](\d{1,2}):(\d{1,2})(?::\d{1,2})?/)
+    if (m) {
+      const [, y, mo, d, hh, mm] = m
+      return `${d.padStart(2, '0')}/${mo.padStart(2, '0')}/${y} ${hh.padStart(2, '0')}:${mm.padStart(2, '0')}`
+    }
+    // DD-MM-YYYY or DD/MM/YYYY[T or space]HH:mm(:ss)?
+    const m2 = ts.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})[T ](\d{1,2}):(\d{1,2})(?::\d{1,2})?/)
+    if (m2) {
+      const [, d, mo, y, hh, mm] = m2
+      return `${d.padStart(2, '0')}/${mo.padStart(2, '0')}/${y} ${hh.padStart(2, '0')}:${mm.padStart(2, '0')}`
+    }
+  }
+  try {
+    const dt = new Date(ts)
+    if (!isNaN(dt.getTime())) {
+      const d = String(dt.getDate()).padStart(2, '0')
+      const mo = String(dt.getMonth() + 1).padStart(2, '0')
+      const y = dt.getFullYear()
+      const hh = String(dt.getHours()).padStart(2, '0')
+      const mm = String(dt.getMinutes()).padStart(2, '0')
+      return `${d}/${mo}/${y} ${hh}:${mm}`
+    }
+  } catch (e) {}
+  return String(ts)
+}
+
+function formatDateOrPeriod(val) {
+  if (!val || val === '-') return '-'
+  const str = String(val).trim()
+  if (str.includes('~')) {
+    const parts = str.split('~')
+    if (parts.length === 2) {
+      return `${formatSingleDate(parts[0])} ~ ${formatSingleDate(parts[1])}`
+    }
+  }
+  if (str.includes(' al ')) {
+    const parts = str.split(' al ')
+    if (parts.length === 2) {
+      return `${formatSingleDate(parts[0])} al ${formatSingleDate(parts[1])}`
+    }
+  }
+  return formatSingleDate(str)
+}
+
+function formatSingleDate(dStr) {
+  if (!dStr) return '-'
+  const trimmed = dStr.trim()
+  // YYYY-MM-DD or YYYY/MM/DD
+  const m1 = trimmed.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/)
+  if (m1) {
+    const [, y, m, d] = m1
+    return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`
+  }
+  // DD-MM-YYYY or DD/MM/YYYY
+  const m2 = trimmed.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/)
+  if (m2) {
+    const [, d, m, y] = m2
+    return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`
+  }
+  return trimmed
 }
 
 function getPunchTypeBadge(type) {

@@ -72,7 +72,9 @@ public class AttendanceController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false, defaultValue = "200") Integer limit) {
 
-        List<Map<String, Object>> records = attendanceService.getStoredRecords(startDate, endDate, userId, search, limit);
+        String isoStart = normalizeToIsoDate(startDate);
+        String isoEnd = normalizeToIsoDate(endDate);
+        List<Map<String, Object>> records = attendanceService.getStoredRecords(isoStart, isoEnd, userId, search, limit);
         return ResponseEntity.ok(records);
     }
 
@@ -111,12 +113,16 @@ public class AttendanceController {
             @RequestParam(required = false) Integer userId,
             @RequestParam(required = false, defaultValue = "inline") String disposition) {
 
-        List<Map<String, Object>> data = attendanceRepository.getReportData(startDate, endDate, userId);
+        String isoStart = normalizeToIsoDate(startDate);
+        String isoEnd = normalizeToIsoDate(endDate);
+        List<Map<String, Object>> data = attendanceRepository.getReportData(isoStart, isoEnd, userId);
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("P_REPORT_TITLE", "Reporte Estadístico de Asistencia (Horas, Retardos, Días) - ZKTeco LX50");
-        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-        parameters.put("P_DATE_FILTER", (startDate != null && !startDate.isBlank() ? startDate : "Inicio") + " al " + (endDate != null && !endDate.isBlank() ? endDate : "Fin"));
+        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        String filterStart = (startDate != null && !startDate.isBlank()) ? formatDateToDdMmYyyy(startDate) : "Inicio";
+        String filterEnd = (endDate != null && !endDate.isBlank()) ? formatDateToDdMmYyyy(endDate) : "Fin";
+        parameters.put("P_DATE_FILTER", filterStart + " al " + filterEnd);
         parameters.put("P_USER_FILTER", userId != null && userId > 0 ? "ID Empleado: " + userId : "Todos los Empleados");
         parameters.put("P_USER", "Recursos Humanos - PoC JasperReports");
 
@@ -131,5 +137,36 @@ public class AttendanceController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
+    }
+
+    private String normalizeToIsoDate(String dateStr) {
+        if (dateStr == null || dateStr.isBlank()) return null;
+        String trimmed = dateStr.trim();
+        if (trimmed.matches("^\\d{1,2}/\\d{1,2}/\\d{4}$")) {
+            String[] p = trimmed.split("/");
+            return String.format("%04d-%02d-%02d", Integer.parseInt(p[2]), Integer.parseInt(p[1]), Integer.parseInt(p[0]));
+        }
+        if (trimmed.matches("^\\d{1,2}-\\d{1,2}-\\d{4}$")) {
+            String[] p = trimmed.split("-");
+            return String.format("%04d-%02d-%02d", Integer.parseInt(p[2]), Integer.parseInt(p[1]), Integer.parseInt(p[0]));
+        }
+        if (trimmed.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$")) {
+            return trimmed;
+        }
+        return trimmed;
+    }
+
+    private String formatDateToDdMmYyyy(String dateStr) {
+        if (dateStr == null || dateStr.isBlank()) return dateStr;
+        String trimmed = dateStr.trim();
+        if (trimmed.matches("^\\d{1,2}/\\d{1,2}/\\d{4}$")) {
+            return trimmed;
+        }
+        try {
+            java.time.LocalDate d = java.time.LocalDate.parse(trimmed, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return d.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (Exception e) {
+            return dateStr;
+        }
     }
 }

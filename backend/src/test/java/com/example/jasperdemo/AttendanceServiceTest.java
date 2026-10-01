@@ -41,8 +41,8 @@ public class AttendanceServiceTest {
             AttendancePreviewResponse preview = parserService.parseZktecoExcel(bais, "ZKTeco_LX50_Asistencia_Ejemplo.xlsx");
 
             Assertions.assertEquals(17, preview.getTotalRows());
-            Assertions.assertEquals(12, preview.getValidRows());
-            Assertions.assertEquals(4, preview.getWarningRows());
+            Assertions.assertEquals(13, preview.getValidRows());
+            Assertions.assertEquals(3, preview.getWarningRows());
             Assertions.assertEquals(1, preview.getInvalidRows());
             Assertions.assertEquals(17, preview.getRecords().size());
         }

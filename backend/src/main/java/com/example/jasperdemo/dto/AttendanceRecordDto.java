@@ -7,9 +7,9 @@ public class AttendanceRecordDto {
     private Integer rowNumber;
     private Integer userId;
     private String employeeName;
-    private String timestamp; // Formato "yyyy-MM-dd HH:mm:ss"
-    private String date;      // Formato "yyyy-MM-dd"
-    private String time;      // Formato "HH:mm:ss"
+    private String timestamp; // Formato "dd/MM/yyyy HH:mm"
+    private String date;      // Formato "dd/MM/yyyy"
+    private String time;      // Formato "HH:mm"
     private String punchType; // ENTRADA, SALIDA, SALIDA_INTERMEDIA, ENTRADA_INTERMEDIA, REGISTRO
     private String verificationMode; // HUELLA, CONTRASENA, TARJETA, OTRO
     private String deviceId;  // LX50

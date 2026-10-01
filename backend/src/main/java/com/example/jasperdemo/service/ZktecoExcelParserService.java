@@ -23,7 +23,7 @@ public class ZktecoExcelParserService {
     private static final Logger log = LoggerFactory.getLogger(ZktecoExcelParserService.class);
 
     private static final Pattern PERIOD_PATTERN = Pattern.compile(
-            "(\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2})\\s*[-~aA]+\\s*(\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2})"
+            "(\\d{1,4}[-/.]\\d{1,2}[-/.]\\d{2,4})\\s*[-~aA]+\\s*(\\d{1,4}[-/.]\\d{1,2}[-/.]\\d{2,4})"
     );
 
     private static final List<DateTimeFormatter> DATE_TIME_FORMATTERS = Arrays.asList(
@@ -41,10 +41,10 @@ public class ZktecoExcelParserService {
     );
 
     private static final List<DateTimeFormatter> DATE_ONLY_FORMATTERS = Arrays.asList(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
             DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
             DateTimeFormatter.ofPattern("M/d/yyyy"),
             DateTimeFormatter.ofPattern("M/d/yy")
     );
@@ -162,9 +162,9 @@ public class ZktecoExcelParserService {
                 if (punchTime == null) {
                     dto.addValidationError("Fecha u hora de checada no válida o ausente.");
                 } else {
-                    dto.setTimestamp(punchTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                    dto.setDate(punchTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                    dto.setTime(punchTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                    dto.setTimestamp(punchTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                    dto.setDate(punchTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    dto.setTime(punchTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
                     // Validación: Fecha en el futuro (> 1 día de hoy)
                     if (punchTime.isAfter(LocalDateTime.now().plusDays(1))) {
@@ -309,7 +309,11 @@ public class ZktecoExcelParserService {
                 String text = cell.toString().trim();
                 Matcher m = PERIOD_PATTERN.matcher(text);
                 if (m.find()) {
-                    return new String[]{ m.group(1).replace('/', '-'), m.group(2).replace('/', '-') };
+                    LocalDate start = parseDateString(m.group(1));
+                    LocalDate end = parseDateString(m.group(2));
+                    String sStr = start != null ? start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : m.group(1).replace('/', '-');
+                    String eStr = end != null ? end.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : m.group(2).replace('/', '-');
+                    return new String[]{ sStr, eStr };
                 }
             }
         }

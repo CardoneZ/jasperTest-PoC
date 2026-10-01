@@ -2,6 +2,7 @@ package com.example.jasperdemo.repository;
 
 import com.example.jasperdemo.dto.AttendanceRecordDto;
 import com.example.jasperdemo.dto.AttendanceStatsDto;
+import com.example.jasperdemo.service.AttendanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -55,7 +56,8 @@ public class AttendanceRepository {
                     ps.setInt(1, dto.getUserId());
                     ps.setString(2, dto.getEmployeeName());
                     ps.setString(3, dto.getDepartment() != null ? dto.getDepartment() : "General");
-                    ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.parse(dto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+                    LocalDateTime parsedDt = AttendanceService.parseFlexibleDateTime(dto.getTimestamp());
+                    ps.setTimestamp(4, parsedDt != null ? Timestamp.valueOf(parsedDt) : new Timestamp(System.currentTimeMillis()));
                     ps.setString(5, dto.getPunchType());
                     ps.setString(6, dto.getNormalHours() != null ? dto.getNormalHours() : "240:00");
                     ps.setString(7, dto.getRealHours() != null ? dto.getRealHours() : "0:00");
@@ -117,8 +119,8 @@ public class AttendanceRepository {
 
                 Timestamp minTs = rs.getTimestamp("earliest_record");
                 Timestamp maxTs = rs.getTimestamp("latest_record");
-                dto.setEarliestRecord(minTs != null ? minTs.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : "-");
-                dto.setLatestRecord(maxTs != null ? maxTs.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : "-");
+                dto.setEarliestRecord(minTs != null ? minTs.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "-");
+                dto.setLatestRecord(maxTs != null ? maxTs.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "-");
                 return dto;
             }
         });

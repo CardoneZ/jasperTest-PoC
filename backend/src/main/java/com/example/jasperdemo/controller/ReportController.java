@@ -39,7 +39,7 @@ public class ReportController {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("P_REPORT_TITLE", "Catálogo General de Películas e Inventario");
-        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         parameters.put("P_CATEGORY_FILTER", categoryId != null && categoryId > 0 ? "Categoría ID: " + categoryId : "Todas las Categorías");
         parameters.put("P_RATING_FILTER", rating != null && !rating.isEmpty() && !rating.equalsIgnoreCase("ALL") ? "Clasificación: " + rating : "Todas");
         parameters.put("P_USER", "Sistema de Gestión - PoC JasperReports");
@@ -71,7 +71,7 @@ public class ReportController {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("P_REPORT_TITLE", "Reporte Agrupado de Rentas e Ingresos por Categoría");
-        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         parameters.put("P_MIN_RENTALS_FILTER", minRentals != null && minRentals > 0 ? minRentals.toString() : "0");
         parameters.put("P_CATEGORY_FILTER", categoryId != null && categoryId > 0 ? "Categoría ID: " + categoryId : "Todas");
         parameters.put("P_USER", "Sistema de Gestión - PoC JasperReports");
@@ -103,7 +103,7 @@ public class ReportController {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("P_REPORT_TITLE", "Panel Ejecutivo de Rendimiento y Análisis de Ingresos");
-        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        parameters.put("P_GENERATION_DATE", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         parameters.put("P_STORE_FILTER", storeId != null && storeId > 0 ? "Sucursal / Tienda " + storeId : "Todas las Sucursales");
         parameters.put("P_USER", "Dirección General - PoC JasperReports");
 

@@ -49,8 +49,8 @@ public class AttendanceService {
             for (AttendanceRecordDto dto : preview.getRecords()) {
                 if (dto.getUserId() != null && dto.getTimestamp() != null) {
                     try {
-                        LocalDateTime ts = LocalDateTime.parse(dto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                        if (attendanceRepository.existsPunch(dto.getUserId(), ts)) {
+                        LocalDateTime ts = parseFlexibleDateTime(dto.getTimestamp());
+                        if (ts != null && attendanceRepository.existsPunch(dto.getUserId(), ts)) {
                             dto.addValidationError("Registro ya almacenado previamente en BD (se ignorará duplicado al confirmar).");
                             if ("VALID".equals(dto.getStatus())) {
                                 dto.setStatus("WARNING");
@@ -156,7 +156,7 @@ public class AttendanceService {
 
             // Fila 1: Metadatos de periodo y dispositivo
             Row r1 = sheet.createRow(1);
-            r1.createCell(0).setCellValue("Periodo: 2026-09-01 ~ 2026-09-30 | Terminal: LX50_RH_PRINCIPAL");
+            r1.createCell(0).setCellValue("Periodo: 01/09/2026 ~ 30/09/2026 | Terminal: LX50_RH_PRINCIPAL");
 
             // Fila 2: Espacio en blanco (común en SSR de ZKTeco)
             sheet.createRow(2);
@@ -175,31 +175,31 @@ public class AttendanceService {
             // Datos de prueba con casos válidos y casos extremos para probar validación
             Object[][] data = {
                     // Normales válidos
-                    {101, "Carlos Mendoza Flores", "2026-09-15 07:58:22", "Entrada", "0", "", "Huella", "LX50"},
-                    {101, "Carlos Mendoza Flores", "2026-09-15 14:02:45", "Salida Almuerzo", "0", "", "Huella", "LX50"},
-                    {101, "Carlos Mendoza Flores", "2026-09-15 15:01:10", "Regreso Almuerzo", "0", "", "Huella", "LX50"},
-                    {101, "Carlos Mendoza Flores", "2026-09-15 18:05:30", "Salida", "0", "", "Huella", "LX50"},
+                    {101, "Carlos Mendoza Flores", "15/09/2026 07:58", "Entrada", "0", "", "Huella", "LX50"},
+                    {101, "Carlos Mendoza Flores", "15/09/2026 14:02", "Salida Almuerzo", "0", "", "Huella", "LX50"},
+                    {101, "Carlos Mendoza Flores", "15/09/2026 15:01", "Regreso Almuerzo", "0", "", "Huella", "LX50"},
+                    {101, "Carlos Mendoza Flores", "15/09/2026 18:05", "Salida", "0", "", "Huella", "LX50"},
 
-                    {102, "Mariana Ruiz Galindo", "2026-09-15 08:04:12", "Entrada", "0", "", "Huella", "LX50"},
-                    {102, "Mariana Ruiz Galindo", "2026-09-15 17:30:44", "Salida", "0", "", "Huella", "LX50"},
+                    {102, "Mariana Ruiz Galindo", "15/09/2026 08:04", "Entrada", "0", "", "Huella", "LX50"},
+                    {102, "Mariana Ruiz Galindo", "15/09/2026 17:30", "Salida", "0", "", "Huella", "LX50"},
 
-                    {103, "Jorge Luis Hernandez", "2026-09-15 08:15:03", "Entrada", "0", "", "Contraseña", "LX50"},
-                    {103, "Jorge Luis Hernandez", "2026-09-15 18:00:19", "Salida", "0", "", "Contraseña", "LX50"},
+                    {103, "Jorge Luis Hernandez", "15/09/2026 08:15", "Entrada", "0", "", "Contraseña", "LX50"},
+                    {103, "Jorge Luis Hernandez", "15/09/2026 18:00", "Salida", "0", "", "Contraseña", "LX50"},
 
-                    {104, "Laura Patricia Ortiz", "2026-09-15 08:00:00", "Entrada", "0", "", "Tarjeta", "LX50"},
-                    {104, "Laura Patricia Ortiz", "2026-09-15 18:10:55", "Salida", "0", "", "Tarjeta", "LX50"},
+                    {104, "Laura Patricia Ortiz", "15/09/2026 08:00", "Entrada", "0", "", "Tarjeta", "LX50"},
+                    {104, "Laura Patricia Ortiz", "15/09/2026 18:10", "Salida", "0", "", "Tarjeta", "LX50"},
 
                     // Empleado sin nombre registrado en el reloj (muy común en ZKTeco)
-                    {105, "", "2026-09-15 08:02:11", "Entrada", "0", "", "Huella", "LX50"},
-                    {105, "", "2026-09-15 17:59:33", "Salida", "0", "", "Huella", "LX50"},
+                    {105, "", "15/09/2026 08:02", "Entrada", "0", "", "Huella", "LX50"},
+                    {105, "", "15/09/2026 17:59", "Salida", "0", "", "Huella", "LX50"},
 
                     // Caso de doble checada consecutiva (< 1 min) -> Generará WARNING
-                    {106, "Roberto Sanchez Peña", "2026-09-15 07:55:10", "Entrada", "0", "", "Huella", "LX50"},
-                    {106, "Roberto Sanchez Peña", "2026-09-15 07:55:25", "Entrada", "0", "", "Huella", "LX50"}, // Doble toque
-                    {106, "Roberto Sanchez Peña", "2026-09-15 17:02:11", "Salida", "0", "", "Huella", "LX50"},
+                    {106, "Roberto Sanchez Peña", "15/09/2026 07:55", "Entrada", "0", "", "Huella", "LX50"},
+                    {106, "Roberto Sanchez Peña", "15/09/2026 07:55", "Entrada", "0", "", "Huella", "LX50"}, // Doble toque
+                    {106, "Roberto Sanchez Peña", "15/09/2026 17:02", "Salida", "0", "", "Huella", "LX50"},
 
                     // Caso inválido: ID de usuario vacío -> Generará INVALID
-                    {"", "Empleado Fantasma", "2026-09-15 08:30:00", "Entrada", "0", "", "Huella", "LX50"},
+                    {"", "Empleado Fantasma", "15/09/2026 08:30", "Entrada", "0", "", "Huella", "LX50"},
 
                     // Caso inválido: Fecha corrupta -> Generará INVALID
                     {107, "Beatriz Domínguez", "FECHA_INVALIDA", "Entrada", "0", "", "Huella", "LX50"}
@@ -226,5 +226,29 @@ public class AttendanceService {
             wb.write(baos);
             return baos.toByteArray();
         }
+    }
+
+    public static LocalDateTime parseFlexibleDateTime(String str) {
+        if (str == null || str.isBlank()) return null;
+        String trimmed = str.trim();
+        List<DateTimeFormatter> formatters = Arrays.asList(
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")
+        );
+        for (DateTimeFormatter fmt : formatters) {
+            try {
+                return LocalDateTime.parse(trimmed, fmt);
+            } catch (Exception ignored) {}
+        }
+        try {
+            return LocalDateTime.parse(trimmed);
+        } catch (Exception ignored) {}
+        return null;
     }
 }
